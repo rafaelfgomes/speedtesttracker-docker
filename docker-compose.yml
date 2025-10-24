@@ -26,6 +26,8 @@ services:
             - config:/config
         depends_on:
             - db
+        networks:
+            - net
     db:
         image: mysql:latest
         container_name: speedtest-tracker-db
@@ -42,6 +44,13 @@ services:
             interval: 5s
             retries: 5
             timeout: 5s
+        networks:
+            - net
+
+networks:
+  net:
+    external: false
+
 volumes:
   config:
     name: speedtest-tracker-config
