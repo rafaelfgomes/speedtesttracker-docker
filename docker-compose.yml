@@ -16,6 +16,12 @@ services:
             - DB_DATABASE=${MYSQL_DATABASE}
             - DB_USERNAME=${MYSQL_USER}
             - DB_PASSWORD=${MYSQL_PASSWORD}
+            - APP_TIMEZONE=${APP_TIMEZONE}
+            - CHART_DATETIME_FORMAT=${DATETIME_FORMAT}
+            - DATETIME_FORMAT=${DATETIME_FORMAT}
+            - DISPLAY_TIMEZONE=${APP_TIMEZONE}
+            - SPEEDTEST_SCHEDULE=${SPEEDTEST_SCHEDULE}
+            - SPEEDTEST_SERVERS=${SPEEDTEST_SERVERS}
         volumes:
             - config:/config
         depends_on:
