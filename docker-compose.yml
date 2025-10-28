@@ -42,7 +42,7 @@ services:
             - SPEEDTEST_SCHEDULE=${SPEEDTEST_SCHEDULE}
             - SPEEDTEST_SERVERS=${SPEEDTEST_SERVERS}
         volumes:
-            - ${CONFIG_FOLDER:./config}:/config
+            - ${CONFIG_FOLDER:-./config}:/config
         restart: unless-stopped
         depends_on:
             - db
