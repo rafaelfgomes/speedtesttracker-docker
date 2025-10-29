@@ -1,7 +1,8 @@
 services:
     db:
-        image: mysql:latest
+        image: mysql
         container_name: speedtest-tracker-db
+        hostname: speedtest-tracker-mysql
         restart: always
         environment:
             - MYSQL_DATABASE=${MYSQL_DATABASE}
@@ -19,7 +20,7 @@ services:
             - net
 
     speedtest-tracker:
-        image: lscr.io/linuxserver/speedtest-tracker:latest
+        image: lscr.io/linuxserver/speedtest-tracker
         container_name: speedtest-tracker
         hostname: speedtest-tracker
         ports:
