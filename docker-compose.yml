@@ -9,7 +9,7 @@ services:
             - MYSQL_PASSWORD=${MYSQL_PASSWORD}
             - MYSQL_RANDOM_ROOT_PASSWORD=true
         volumes:
-            - db:/var/lib/mysql
+            - ${DB_DATA_FOLDER:-./dbdata}:/var/lib/mysql
         healthcheck:
             test: ["CMD", "mysqladmin", "ping", "-p${MYSQL_PASSWORD}"]
             interval: 5s
@@ -52,7 +52,3 @@ services:
 networks:
   net:
     external: false
-
-volumes:
-  db:
-    name: speedtest-tracker-dbdata
