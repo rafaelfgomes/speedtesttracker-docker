@@ -42,6 +42,7 @@ services:
             - DISPLAY_TIMEZONE=${APP_TIMEZONE}
             - SPEEDTEST_SCHEDULE=${SPEEDTEST_SCHEDULE}
             - SPEEDTEST_SERVERS=${SPEEDTEST_SERVERS}
+            - SPEEDTEST_BLOCKED_SERVERS=${SPEEDTEST_BLOCKED_SERVERS}
         volumes:
             - ${CONFIG_FOLDER:-./config}:/config
         restart: unless-stopped
