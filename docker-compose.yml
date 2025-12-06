@@ -10,18 +10,13 @@ services:
             - MYSQL_PASSWORD=${MYSQL_PASSWORD}
             - MYSQL_RANDOM_ROOT_PASSWORD=true
         volumes:
-            - ${DB_DATA_FOLDER:-./dbdata}:/var/lib/mysql
-        healthcheck:
-            test: ["CMD", "mysqladmin", "ping", "-p${MYSQL_PASSWORD}"]
-            interval: 5s
-            retries: 5
-            timeout: 5s
+            - db:/var/lib/mysql
         networks:
             - net
 
     speedtest-tracker:
         image: lscr.io/linuxserver/speedtest-tracker
-        container_name: speedtest-tracker
+        container_name: speedtest-tracker-app
         hostname: speedtest-tracker
         ports:
             - ${SPEEDTESTTRACKER_HTTP_PORT:-80}:80
@@ -44,12 +39,18 @@ services:
             - SPEEDTEST_SERVERS=${SPEEDTEST_SERVERS}
             - SPEEDTEST_BLOCKED_SERVERS=${SPEEDTEST_BLOCKED_SERVERS}
         volumes:
-            - ${CONFIG_FOLDER:-./config}:/config
+            - config:/config
         restart: unless-stopped
         depends_on:
             - db
         networks:
             - net
+
+volumes:
+    db:
+        name: speedtest-tracker-db
+    config:
+        name: speedtest-tracker-config
 
 networks:
   net:
