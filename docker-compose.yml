@@ -15,7 +15,7 @@ services:
             - net
 
     speedtest-tracker:
-        image: lscr.io/linuxserver/speedtest-tracker
+        image: linuxserver/speedtest-tracker
         container_name: speedtest-tracker-app
         hostname: speedtest-tracker
         ports:
