@@ -2,7 +2,7 @@ services:
     db:
         image: mysql
         container_name: speedtest-tracker-db
-        hostname: speedtest-tracker-mysql
+        hostname: speedtest-tracker-db
         restart: always
         environment:
             - MYSQL_DATABASE=${MYSQL_DATABASE}
@@ -12,15 +12,12 @@ services:
         volumes:
             - db:/var/lib/mysql
         networks:
-            - net
+            - local
 
     speedtest-tracker:
         image: linuxserver/speedtest-tracker
         container_name: speedtest-tracker-app
         hostname: speedtest-tracker
-        ports:
-            - ${SPEEDTESTTRACKER_HTTP_PORT:-80}:80
-            - ${SPEEDTESTTRACKER_HTTPS_PORT:-443}:443
         environment:
             - PUID=${PUID}
             - PGID=${PGID}
@@ -44,7 +41,12 @@ services:
         depends_on:
             - db
         networks:
-            - net
+            net:
+                ipv4_address: ${APP_IP}
+            local:
+        dns:
+            - ${DNS_IP_1}
+            - ${DNS_IP_2:-9.9.9.9}
 
 volumes:
     db:
@@ -54,4 +56,7 @@ volumes:
 
 networks:
   net:
-    external: false
+    external: true
+    name: webapps-network
+  local:
+    driver: bridge
