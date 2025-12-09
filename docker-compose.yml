@@ -60,3 +60,4 @@ networks:
     name: webapps-network
   local:
     driver: bridge
+    internal: true
