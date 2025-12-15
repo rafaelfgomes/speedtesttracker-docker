@@ -23,7 +23,7 @@ services:
             - PGID=${PGID}
             - APP_KEY=${SPEEDTESTTRACKER_APP_KEY}
             - DB_CONNECTION=mysql
-            - DB_HOST=db
+            - DB_HOST=speedtesttracker-mysql
             - DB_PORT=3306
             - DB_DATABASE=${MYSQL_DATABASE}
             - DB_USERNAME=${MYSQL_USER}
