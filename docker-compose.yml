@@ -1,5 +1,5 @@
 services:
-    db:
+    speedtesttracker-mysql:
         image: mysql
         container_name: speedtest-tracker-db
         hostname: speedtest-tracker-db
@@ -10,11 +10,11 @@ services:
             - MYSQL_PASSWORD=${MYSQL_PASSWORD}
             - MYSQL_RANDOM_ROOT_PASSWORD=true
         volumes:
-            - db:/var/lib/mysql
+            - ${SPEEDTESTTRACKER_DBDATA_FOLDER:-./dbdata}:/var/lib/mysql
         networks:
-            - local
+            net:
 
-    speedtest-tracker:
+    speedtesttracker:
         image: linuxserver/speedtest-tracker
         container_name: speedtest-tracker-app
         hostname: speedtest-tracker
@@ -36,28 +36,15 @@ services:
             - SPEEDTEST_SERVERS=${SPEEDTEST_SERVERS}
             - SPEEDTEST_BLOCKED_SERVERS=${SPEEDTEST_BLOCKED_SERVERS}
         volumes:
-            - config:/config
+            - ${SPEEDTESTTRACKER_CONFIG_FOLDER:-./config}:/config
         restart: unless-stopped
         depends_on:
-            - db
+            - speedtesttracker-mysql
         networks:
             net:
-                ipv4_address: ${APP_IP}
-            local:
         dns:
             - ${DNS_IP_1}
             - ${DNS_IP_2:-9.9.9.9}
 
-volumes:
-    db:
-        name: speedtest-tracker-db
-    config:
-        name: speedtest-tracker-config
-
 networks:
-  net:
-    external: true
-    name: webapps-network
-  local:
-    driver: bridge
-    internal: true
+  net: {}
