@@ -1,19 +1,4 @@
 services:
-  database:
-    image: mysql
-    container_name: speedtest-tracker-db
-    hostname: speedtest-tracker-db
-    restart: always
-    environment:
-      - MYSQL_DATABASE=${MYSQL_DATABASE}
-      - MYSQL_USER=${MYSQL_USER}
-      - MYSQL_PASSWORD=${MYSQL_PASSWORD}
-      - MYSQL_RANDOM_ROOT_PASSWORD=true
-    volumes:
-      - data:/var/lib/mysql
-    networks:
-      net:
-
   speedtesttracker:
     image: linuxserver/speedtest-tracker
     container_name: speedtest-tracker-app
@@ -21,18 +6,13 @@ services:
     environment:
       - PUID=${PUID}
       - PGID=${PGID}
-      - APP_KEY=${SPEEDTESTTRACKER_APP_KEY}
+      - APP_KEY=${APP_KEY}
       - APP_URL=${APP_URL}
+      - DB_CONNECTION=sqlite
       - ADMIN_NAME=${ADMIN_NAME}
       - ADMIN_EMAIL=${ADMIN_EMAIL}
-      - ASSET_URL=${ASSET_URL}
       - ADMIN_PASSWORD=${ADMIN_PASSWORD}
-      - DB_CONNECTION=mysql
-      - DB_HOST=database
-      - DB_PORT=3306
-      - DB_DATABASE=${MYSQL_DATABASE}
-      - DB_USERNAME=${MYSQL_USER}
-      - DB_PASSWORD=${MYSQL_PASSWORD}
+      - ASSET_URL=${ASSET_URL}
       - APP_LOCALE=${APP_LOCALE}
       - APP_TIMEZONE=${APP_TIMEZONE}
       - CHART_DATETIME_FORMAT=${DATETIME_FORMAT}
@@ -44,18 +24,4 @@ services:
     volumes:
       - ./config:/config
     restart: unless-stopped
-    depends_on:
-      - database
-    ports:
-      - 80:80
-      - 443:443
-    networks:
-      net:
-
-volumes:
-  data:
-    name: speedtesttracker-data
-
-networks:
-  net:
-    name: speedtesttracker-network
+    network_mode: host
