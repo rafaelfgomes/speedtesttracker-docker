@@ -20,9 +20,17 @@ services:
       - DISPLAY_TIMEZONE=${APP_TIMEZONE}
       - SPEEDTEST_SCHEDULE=${SPEEDTEST_SCHEDULE}
       - SPEEDTEST_SERVERS=${SPEEDTEST_SERVERS}
-      - SPEEDTEST_BLOCKED_SERVERS=${SPEEDTEST_BLOCKED_SERVERS}
+      - SPEEDTEST_BLOCKED_SERVERS=${SPEEDTEST_BLOCKED_SERVERS}]
+      - DB_CONNECTION=pgsql
+      - DB_HOST=postgresql://admin:${POSTGRES_PASSWORD}@postgres:5432/speedtest-tracker
+      - DB_PORT=5432
+      - DB_DATABASE=speedtest-tracker
+      - DB_USERNAME=admin
+      - DB_PASSWORD=${POSTGRES_PASSWORD}
     volumes:
-      - ${SPEEDTEST_CONFIG_FOLDER:-./config}:/config
+      - ${SPEEDTEST_CONFIG_FOLDER:-./data/config}:/config
+    ports:
+      - ${SPEEDTEST_PORT:-80}:80
     restart: unless-stopped
     healthcheck:
       test: curl -fSs APP_URL/api/healthcheck | jq -r .message || exit 1
@@ -30,6 +38,20 @@ services:
       retries: 3
       start_period: 30s
       timeout: 10s
+    networks:
+      local:
+
+  postgres:
+    image: postgres:17.9-alpine
+    container_name: speedtest-tracker-db
+    restart: always
+    volumes:
+      - ${POSTGRES_DBDATA_FOLDER:-./data/postgres}:/var/lib/postgresql/data
+    environment:
+      - POSTGRES_USER=admin
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
+      - POSTGRES_DB=speedtest-tracker
+      - TZ=${APP_TIMEZONE:-Etc/UTC}
     networks:
       local:
 
