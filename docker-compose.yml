@@ -22,7 +22,7 @@ services:
       - SPEEDTEST_SERVERS=${SPEEDTEST_SERVERS}
       - SPEEDTEST_BLOCKED_SERVERS=${SPEEDTEST_BLOCKED_SERVERS}]
       - DB_CONNECTION=pgsql
-      - DB_HOST=postgresql://admin:${POSTGRES_PASSWORD}@postgres:5432/speedtest-tracker
+      - DB_HOST=postgres
       - DB_PORT=5432
       - DB_DATABASE=speedtest-tracker
       - DB_USERNAME=admin
